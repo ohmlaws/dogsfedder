@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SDF</title>
+  <title>Donate for Dogs Feeder</title>
   <link rel="stylesheet" href="styles.css">
-  <link rel="icon" type="image/png" sizes="32x32" href="./images/icon.png">
 </head>
 <body>
   <header class="header">
@@ -18,17 +17,17 @@
       <h2>Dogs We Saved Together</h2>
       <div class="animal-grid">
         <div class="animal-card">
-          <img src="./images/blackdog.jpg" alt="Rescued Dog">
+          <img src="/blackdog.jpg" alt="Rescued Dog">
           <h3>Rocky</h3>
           <p>Rocky was rescued from the streets, hungry and injured. Now, he's healthy and loved thanks to your donations.</p>
         </div>
         <div class="animal-card">
-          <img src="./images/whitedog.jpg" alt="Rescued Dog">
+          <img src="whitedog.jpg" alt="Rescued Dog">
           <h3>Sheru</h3>
           <p>Sheru was abandoned as a puppy. We provided her shelter, food, and care. She's now living happily in her forever home.</p>
         </div>
         <div class="animal-card">
-          <img src="./images/reddog.jpg" alt="Rescued Dog">
+          <img src="reddog.jpg" alt="Rescued Dog">
           <h3>Bubzee</h3>
           <p>Injured and unable to walk, Bubzee was treated and rehabilitated.</p>
         </div>
@@ -39,12 +38,57 @@
       <h2>Donate via UPI</h2>
       <p>Help us save more animals. Scan the QR code below or click the button to donate via UPI:</p>
       <div class="qr-code">
-        <img src="./images/qrcode.jpg" alt="UPI QR Code">
+        <img src="qrcode.jpg" alt="UPI QR Code">
       </div>
       <p><strong>UPI ID:</strong> arpan1@jio</p>
       <a href="upi://pay?pa=arpan1@jio&am=10&cu=INR" class="upi-btn">Donate Now via UPI</a>
     </section>
   </main>
+
+<div id="contact">
+    <form action="https://api.staticforms.xyz/submit" method="post" onsubmit="return validateForm()">
+        <h2>Contact Us</h2>
+        <input type="hidden" name="accessKey" value="dd8e0450-c951-4173-b3bb-ec34b24537f8">
+        
+        <label for="name">Your Name <span class="required">*</span></label>
+        <input type="text" name="name" id="name" placeholder="Your Name" required>              
+        
+        <label for="email">Your Email <span class="required">*</span></label>
+        <input type="email" name="email" id="email" placeholder="Your Email" required>
+       
+        <label for="age">Your Age <span class="required">*</span></label>
+        <input type="text" name="$age" id="age" placeholder="Your Age" required>
+       
+        <label for="address">Address<span class="required">*</span></label>
+        <input type="text" name="$Address" id="text" placeholder="Enter Full Address" required>
+        
+        <label for="phone">Phone Number</label>
+        <input type="tel" name="phone" id="phone" placeholder="Phone Number (Optional)" pattern="[0-9]+" title="Please enter numbers only">
+        
+        <label for="message">Your Message <span class="required">*</span></label>
+        <textarea name="message" id="message" placeholder="Type Your Message here" required></textarea>       
+        
+        <input type="hidden" name="redirectTo" value="https://ohmlaws.github.io/dogsfedder/contact.html">
+        
+        <input type="submit" value="Submit">
+    </form>
+    </div>
+
+    <script>
+        function validateForm() {
+            // Get the message input
+            const message = document.getElementById('message').value.trim();
+
+            // Check if the message has at least 30 words
+            if (message.split(' ').length < 30) {
+                alert('Must contain at least 30 words.');
+                return false; // Prevent form submission
+            }
+
+            // Email is already validated by the `type="email"` attribute
+            return true; // Allow form submission
+        }
+    </script>
 
   <footer class="footer">
     <p>&copy; 2025 Dog Feeder Initiative. All rights reserved.</p>
