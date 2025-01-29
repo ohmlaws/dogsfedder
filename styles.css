@@ -100,10 +100,80 @@ h2 {
   background-color: #45a049;
 }
 
+ #contact {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f9f9f9;
+        }
+
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        form label {
+            font-size: 14px;
+            color: #333;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        form label .required {
+            color: red;
+        }
+
+        form input[type="text"],
+        form input[type="tel"],
+        form input[type="email"],
+        form textarea {
+            width: 95%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        form textarea {
+            resize: none;
+            height: 100px;
+        }
+
+        form input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        form input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        form h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
 /* Footer */
 .footer {
   text-align: center;
   padding: 1rem;
   background-color: #4CAF50;
   color: white;
-  }
+}
