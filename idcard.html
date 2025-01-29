@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDF ID Card</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: "Noto Serif", serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+            
+        }
+
+        .header {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 0.1rem;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        .form-container, .id-card-container {
+            width: 370px;
+            margin-bottom: 20px;
+        }
+
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            margin-left: 10px;   
+                }
+
+        form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        form input[type="email"], form input[type="text"], form input[type="file"], form input[type="tel"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        #role {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        form input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 4px;
+        }
+
+        form input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .id-card {
+            width: 320px;
+            height: 200px;
+            border: 2px solid #000;
+            border-radius: 8px;
+            background-color: #fff;
+            font-size: 11px;
+            overflow: hidden;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+            display: none;
+            position: relative;
+            margin: 20px auto;
+        }
+
+        .id-card .header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header img {
+            width: 30px;
+            height: 30px;
+        }
+
+        .header h2 {
+            font-size: 14px;
+            flex: 1;
+            text-align: center;
+            margin: 0;
+        }
+
+        .header .roles {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .id-card .content {
+            padding-left: 10px;
+            padding-top: 7px;
+            display: flex;
+        }
+
+        .profile-image {
+            width: 80px;
+            height: 80px;
+            border: 2px solid #000;
+            border-radius: 8px;
+            background-color: #f3f3f3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .details {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            margin-left: 10px;
+            word-wrap: break-word;
+        }
+
+        .details p {
+            margin: 5px 0;
+        }
+
+        .address-container {
+            position: absolute;
+            top: 155px;
+            left: 10px;
+            word-wrap: break-word;
+            width: calc(100% - 120px);
+        }
+
+        .qr-code {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            width: 60px;
+            height: 60px;
+            border: 1px solid #ccc;
+        }
+
+        .qr-code img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        #downloadBtn {
+            display: none;
+            margin: 20px auto;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        #downloadBtn:hover {
+            background-color: #45a049;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 0.1rem;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 12px;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #66af8c;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .modal input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 15px;
+        }
+
+        .modal-buttons button {
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            border-radius: 20px;
+        }
+
+        #verifyCodeBtn {
+            background: green;
+            color: white;
+        }
+
+        #cancelModalBtn {
+            background: red;
+            color: white;
+        }
+
+        /* Popup Styles */
+        .popup {
+            display: none;
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 15px;
+            border-radius: 5px;
+            min-width: 200px;
+            justify-content: center;
+            text-align: center;
+            z-index: 1000;
+        }
+
+        .success {
+            background: green;
+            color: white;
+            font-size: 13px;        }
+
+        .error {
+            background: red;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Dog Feeder Initiative</h1>
+    </header>
+    <div style="text-align: center; font-weight: bold; font-size: 20px; padding: 10px;">Make Your ID Card Here</div>
+    <div class="form-container">
+        <form id="idForm">
+            <label for="name">Name:</label>
+            <input type="text" id="name" placeholder="Enter your name" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" placeholder="Enter your email" required>
+
+            <label for="phone">Mobile Number:</label>
+            <input type="tel" id="phone" placeholder="Enter your mobile number" required>
+
+            <label for="age">Age:</label>
+            <input type="tel" id="age" placeholder="Enter your age" required>
+
+            <label for="address">Address:</label>
+            <input type="text" id="address" placeholder="Enter your address" required>
+
+            <label for="role">Select Role:</label>
+            <select id="role" required>
+                <option value="">-- Select a Role --</option>
+                <option value="Volunteer">Volunteer</option>
+                <option value="Member">Member</option>
+                <option value="Founder">Founder</option>
+            </select>
+
+            <label for="image">Upload Image: <span style="font-size: 10px;">(Height and Width should be same, only jpg/png)</span></label>
+            <input type="file" id="image" accept="image/*" required>
+
+            <input type="submit" value="Generate ID Card">
+        </form>
+    </div>
+
+    <!-- Verification Code Modal -->
+    <div id="codeModal" class="modal">
+        <div class="modal-content">
+            <h2 id="modalTitle">Enter Verification Code</h2>
+            <input type="text" id="verificationCodeInput" placeholder="Enter code">
+            <div class="modal-buttons">
+                <button id="verifyCodeBtn">Verify</button>
+                <button id="cancelModalBtn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success/Error Popup -->
+    <div id="popupMessage" class="popup"></div>
+
+    <div class="id-card-container">
+        <div class="id-card" id="idCard">
+            <div class="header">
+                <img src="./images/icon.png" alt="Logo">
+                <h2>SDF ID CARD</h2>
+                <div class="roles">
+                    <span id="displayRole">VIP</span>
+                </div>
+            </div>
+            <div class="content">
+                <div class="profile-image">
+                    <img id="profileImage" src="https://raw.githubusercontent.com/ohmlaws/dogsfedder/main/images/icon.png" alt="Profile Image">
+                </div>
+                <div class="details">
+                    <p><strong>Name:</strong> <span id="displayName">John Doe</span></p>
+                    <p><strong>Email:</strong> <span id="displayEmail">example@mail.com</span></p>
+                    <p><strong>Mobile:</strong> <span id="displayPhone">1234567890</span></p>
+                    <p><strong>Age:</strong> <span id="displayAge">25</span></p>
+                    <div class="address-container">
+                        <p><strong>Address:</strong> <span id="displayAddress">123 Street, City</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="qr-code">
+                <img id="qrCode" src="https://raw.githubusercontent.com/ohmlaws/dogsfedder/main/images/icon.png" alt="QR Code">
+            </div>
+        </div>
+        <button class="download-btn" id="downloadBtn">Download ID Card</button>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2025 Dog Feeder Initiative. All rights reserved.</p>
+    </footer>
+
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
+        import { getDatabase, ref, get, push, set } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-database.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-analytics.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyA60SLgnn7A73T2cYPn0LOSKxce1eUR4tM",
+            authDomain: "dogsfedder.firebaseapp.com",
+            databaseURL: "https://dogsfedder-default-rtdb.firebaseio.com",
+            projectId: "dogsfedder",
+            storageBucket: "dogsfedder.appspot.com",
+            messagingSenderId: "65910446187",
+            appId: "1:65910446187:web:f39cb1b33b3cc1fe60392e",
+            measurementId: "G-KPC01XCV8J"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getDatabase(app);
+
+        // Form Elements
+        const form = document.getElementById("idForm");
+        const idCard = document.getElementById("idCard");
+        const downloadBtn = document.getElementById("downloadBtn");
+        const roleSelect = document.getElementById("role");
+
+        let roleVerified = { Founder: false, Volunteer: false, Member: false }; // Track role verification
+
+        // Role verification logic
+        roleSelect.addEventListener("change", function () {
+            const role = this.value;
+
+            if (role) {
+                // Show the modal for code entry
+                document.getElementById("codeModal").style.display = "flex";
+                document.getElementById("modalTitle").textContent = `Enter Verification Code`;
+
+                document.getElementById("verifyCodeBtn").onclick = function () {
+                    const enteredCode = document.getElementById("verificationCodeInput").value;
+
+                    // Fetch verification code from Firebase Realtime Database
+                    get(ref(db, "verification_codes/" + role)).then(snapshot => {
+                        if (snapshot.exists() && enteredCode === snapshot.val()) {
+                            showPopup("success", "Code verified! You can proceed.");
+                            roleVerified[role] = true;
+                            document.getElementById("codeModal").style.display = "none"; // Close modal
+                        } else {
+                            showPopup("error", "Incorrect code! Try again.");
+                        }
+                    }).catch(error => console.error("Error fetching code:", error));
+                };
+            }
+        });
+
+        // Form submission logic
+        form.addEventListener("submit", function (e) {
+            e.preventDefault(); // Prevent form submission
+
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const phone = document.getElementById("phone").value;
+            const age = document.getElementById("age").value;
+            const address = document.getElementById("address").value;
+            const role = document.getElementById("role").value;
+            const image = document.getElementById("image").files[0];
+
+            // Update ID card preview
+            document.getElementById("displayName").textContent = name;
+            document.getElementById("displayEmail").textContent = email;
+            document.getElementById("displayPhone").textContent = phone;
+            document.getElementById("displayAge").textContent = age;
+            document.getElementById("displayAddress").textContent = address;
+             // Update the role and set its color dynamically
+    const displayRole = document.getElementById('displayRole');
+    displayRole.textContent = role;
+
+    if (role === "Volunteer") {
+        displayRole.style.color = "orange";
+    } else if (role === "Member") {
+        displayRole.style.color = "yellow";
+    } else if (role === "Founder") {
+        displayRole.style.color = "red";
+    } else {
+        displayRole.style.color = "black"; // Default color
+    }
+
+    if (image) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            document.getElementById('profileImage').src = e.target.result;
+        };
+        reader.readAsDataURL(image);
+    }
+
+    const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${encodeURIComponent(
+        `${name}, ${email}, ${phone}, ${age}, ${address}`
+    )}`;
+    fetch(qrCodeUrl)
+        .then((response) => response.blob())
+        .then((blob) => {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById('qrCode').src = e.target.result;
+                idCard.style.display = 'block';
+                downloadBtn.style.display = 'block';
+            };
+            reader.readAsDataURL(blob);
+        });
+});
+
+downloadBtn.addEventListener('click', function () {
+    html2canvas(idCard).then(function (canvas) {
+        const link = document.createElement('a');
+        link.download = 'id-card.png';
+        link.href = canvas.toDataURL();
+        link.click();
+    });
+});
+
+        // Function to show success/error popup
+        function showPopup(type, message) {
+            const popup = document.getElementById("popupMessage");
+            popup.textContent = message;
+            popup.className = `popup ${type}`;
+            popup.style.display = "block";
+
+            setTimeout(() => {
+                popup.style.display = "none";
+            }, 3000);
+        }
+
+        // Close modal when Cancel is clicked
+        document.getElementById("cancelModalBtn").addEventListener("click", function () {
+            document.getElementById("codeModal").style.display = "none";
+        });
+    </script>
+</body>
+</html>
